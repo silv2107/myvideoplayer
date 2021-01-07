@@ -5,10 +5,9 @@ var controls = myVideoPlayer.querySelector(".controls");
 var volumeToggle = myVideoPlayer.querySelector(".volumeToggle");
 var volumeSlider = myVideoPlayer.querySelector(".volumeSlider");
 var rangeFinder = myVideoPlayer.querySelector(".rangeFinder");
-var progress = rangeFinder.querySelector(".progress");
 var range = document.getElementById("range2");
+var preBar = document.querySelector('.preBar');
 var currentVolume = 1;
-
 
 if (navigator.userAgent.indexOf("Chrome") > 0) {
 	controls.style.width = (video.offsetWidth - 106) + "px";
@@ -18,8 +17,12 @@ if (navigator.userAgent.indexOf("Chrome") > 0) {
 
 video.addEventListener("timeupdate", function(event) {
 	var progress = ((video.currentTime * 100) / video.duration);
-	range.value = progress;
+	range.value = progress.toFixed(2);
 	rangeColor(range);
+});
+
+range.addEventListener("change", function(event) {
+	video.currentTime = video.duration / 100 * range.value;
 });
 
 playButton.addEventListener("click", function(event) {
@@ -50,8 +53,6 @@ volumeSlider.addEventListener("change", function(event) {
 });
 
 // -- RangeFinder --
-var preBar = document.querySelector('.preBar');
-
 function rangeColor(input) {
   input.className = input.className.length ? (input.className + ' colorized') : 'colorized';
 	preBar.style.width = input.value + '%';
